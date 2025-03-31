@@ -11,6 +11,9 @@ function App() {
   // Attributes state variables
   const [currentAttributes, setNextAttributes] = useState([])
 
+  // Bans state variables
+  const [currentBans, setNextBan] = useState([]);
+
   const retreiveArtwork = () => {
     // Create a new API fetch request
     makeQuery();
@@ -37,9 +40,13 @@ function App() {
         alert("Oops: Something went wrong with that query. Art data couldn't be retreived.")
     else{
       // Get image and relevant attributes and place them into state variables
+      let basicInfo = [json.records[0].title]
       let image = json.records[0].images[0].baseimageurl
-      console.log(image)
+      let attributes = [json.records[0].culture, json.records[0].period, json.records[0].medium]
+      console.log(attributes)
+      //setNextBasicInfo(basicInfo)
       setNextImage(image)
+      setNextAttributes(attributes)
     }
   }
 
@@ -56,6 +63,30 @@ function App() {
         <div></div>
       )}
 
+      {currentAttributes[0] ? (
+        <div className="culture">
+          {currentAttributes[0]}
+        </div>
+      ) : (
+        <div></div>
+      )}
+
+      {currentAttributes[0] ? (
+        <div className="period">
+          {currentAttributes[1]}
+        </div>
+      ) : (
+        <div></div>
+      )}
+
+      {currentAttributes[0] ? (
+        <div className="medium">
+          {currentAttributes[2]}
+        </div>
+      ) : (
+        <div></div>
+      )}
+      <br />
       <button onClick={retreiveArtwork}>Discover</button>
     </>
   )
