@@ -15,7 +15,14 @@ function App() {
   const [currentBans, setNextBan] = useState([]);
 
   const retreiveArtwork = () => {
-    // Create a new API fetch request
+    // Set default values for fetch request
+
+    // Loop through bans and check if any values to the key-value
+    // pairs are not null. If so, exclude the values from the fetch response
+    // by checking if they're contained and refetching if so. If not, use
+    // corresponding default value for fetch request
+
+    // Create a new fetch request
     makeQuery();
     // (STRETCH) Display name
     // (STRETCH) Display details about the art piece
@@ -28,7 +35,7 @@ function App() {
     // Make a query for an object
       // After the first click, these results might depend
       // on what the user selects to ban
-    let objectQuery =`https://api.harvardartmuseums.org/object?apikey=${ACCESS_KEY}&hasimage=1&size=1`
+    let objectQuery =`https://api.harvardartmuseums.org/object?apikey=${ACCESS_KEY}&size=1&hasimage=1`
     callAPI(objectQuery).catch(console.error)
   }
 
@@ -41,12 +48,24 @@ function App() {
     else{
       // Get image and relevant attributes and place them into state variables
       let basicInfo = [json.records[0].title]
-      let image = json.records[0].images[0].baseimageurl
-      let attributes = [json.records[0].culture, json.records[0].period, json.records[0].medium]
-      console.log(attributes)
-      //setNextBasicInfo(basicInfo)
-      setNextImage(image)
-      setNextAttributes(attributes)
+      if(json.records[0].images > 0 && 
+         json.records[0].culture &&
+         json.records[0].period &&
+         json.records[0].medium){
+        let image = json.records[0].images[0].baseimageurl
+        let attributes = [json.records[0].culture, json.records[0].period, json.records[0].medium]
+        //setNextBasicInfo(basicInfo)
+        console.log(attributes)
+        setNextAttributes(attributes)
+        console.log(image)
+        setNextImage(image)
+      }
+      else{
+        let image = null
+        console.log(image)
+        let attributes = [null, null, null]
+        console.log(attributes)
+      }
     }
   }
 
@@ -60,33 +79,36 @@ function App() {
              alt="Image returned"
         />
       ) : (
-        <div></div>
+        <div className="no-image"></div>
       )}
 
       {currentAttributes[0] ? (
-        <div className="culture">
+        <button className="culture">
           {currentAttributes[0]}
-        </div>
+        </button>
       ) : (
         <div></div>
       )}
 
       {currentAttributes[0] ? (
-        <div className="period">
+        <button className="period">
           {currentAttributes[1]}
-        </div>
+        </button>
       ) : (
         <div></div>
       )}
 
       {currentAttributes[0] ? (
-        <div className="medium">
+        <button className="medium">
           {currentAttributes[2]}
-        </div>
+        </button>
       ) : (
         <div></div>
       )}
+
       <br />
+      <br />
+      
       <button onClick={retreiveArtwork}>Discover</button>
     </>
   )
