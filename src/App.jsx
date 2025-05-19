@@ -32,7 +32,7 @@ function App() {
   }
 
   const makeQuery = () => {
-    // Make a query for an object
+    // Make a query for an objectfff
       // After the first click, these results might depend
       // on what the user selects to ban
     let objectQuery =`https://api.harvardartmuseums.org/object?apikey=${ACCESS_KEY}&size=1&hasimage=1`
